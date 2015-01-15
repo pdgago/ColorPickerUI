@@ -20,5 +20,6 @@
     "tests"
   ],
   "devDependencies": {
+    "micro-templating": "https://gist.github.com/1ba771583eea5a59ac82.git"
   }
 }

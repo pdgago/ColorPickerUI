@@ -20,15 +20,7 @@ module.exports = function(grunt) {
       ]
     },
 
-    concurrent: {
-      options: {
-        logConcurrentOutput: true
-      },
-      server: [
-      ],
-      dist: [
-      ]
-    },
+    clean: ['.tmp'],
 
     bower: {
       install: {
@@ -44,7 +36,7 @@ module.exports = function(grunt) {
       },
       scripts: {
         files: '<%= jshint.files %>',
-        tasks: ['build', 'jshint']
+        tasks: ['htmlConvert', 'build', 'jshint']
       }
     },
 
@@ -52,8 +44,10 @@ module.exports = function(grunt) {
       dist: {
         src: [
           'src/start.js',
-          'src/color-picker-view.js',
-          'src/end.js',
+          'bower_components/micro-templating/micro-mustache.js',
+          '.tmp/templates.js',
+          'src/color-picker-ui.js',
+          'src/end.js'
         ],
         dest: 'color-picker-ui.js'
       }
@@ -81,12 +75,23 @@ module.exports = function(grunt) {
       server: {
         command: 'http-server demo/'
       }
-    }
+    },
+
+    htmlConvert: {
+      options: {
+        // custom options, see below    
+      },
+      templates: {
+        src: ['src/templates/*.html'],
+        dest: '.tmp/templates.js'
+      },
+    },
 
   });
 
   grunt.registerTask('build', [
-    'concurrent:dist',
+    'clean',
+    'htmlConvert',
     'concat',
     'uglify',
     'copy:demo'
@@ -95,7 +100,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('run', [
     'bower',
-    'concurrent:server',
+    'build',
     'watch'
   ]);
 

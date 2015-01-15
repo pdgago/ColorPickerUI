@@ -16,7 +16,9 @@
 
 $(function() {
   $('#pickerBtn').on('click', function(e) {
-    var colorPicker = new ColorPickerUi({});
+    var colorPicker = new ColorPickerUi({
+      target: e.currentTarget
+    });
     console.log(colorPicker);    
   });
 });

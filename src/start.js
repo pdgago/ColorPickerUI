@@ -1,4 +1,3 @@
 /* jshint ignore:start */
-!function(context) {
-  'use strict';
+!function() {
 /* jshint ignore:end */
