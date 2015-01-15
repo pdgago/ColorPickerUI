@@ -44,7 +44,7 @@ module.exports = function(grunt) {
       },
       scripts: {
         files: '<%= jshint.files %>',
-        tasks: ['jshint', 'build']
+        tasks: ['build', 'jshint']
       }
     },
 
@@ -52,7 +52,8 @@ module.exports = function(grunt) {
       dist: {
         src: [
           'src/start.js',
-          'src/end.js'
+          'src/color-picker-view.js',
+          'src/end.js',
         ],
         dest: 'color-picker-ui.js'
       }
@@ -71,6 +72,15 @@ module.exports = function(grunt) {
         src: 'color-picker-ui.js',
         dest: 'demo/'
       }
+    },
+
+    shell: {
+      options: {
+        stderr: false
+      },
+      server: {
+        command: 'http-server demo/'
+      }
     }
 
   });
@@ -87,6 +97,10 @@ module.exports = function(grunt) {
     'bower',
     'concurrent:server',
     'watch'
+  ]);
+
+  grunt.registerTask('s', [
+    'shell:server'
   ]);
 
   grunt.registerTask('default', 'run');
