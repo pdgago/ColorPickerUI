@@ -11,13 +11,15 @@
 <body>
 <button id="pickerBtn">Pick a color</button>
 <script src="//code.jquery.com/jquery-1.11.2.js"></script>
+<link rel="stylesheet" type="text/css" href="color-picker-ui.css">
 <script src="color-picker-ui.js"></script>
 <script>
 
 $(function() {
   $('#pickerBtn').on('click', function(e) {
     var colorPicker = new ColorPickerUi({
-      target: e.currentTarget
+      target: e.currentTarget,
+      lang: 'en'
     });
     console.log(colorPicker);    
   });

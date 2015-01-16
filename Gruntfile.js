@@ -34,6 +34,14 @@ module.exports = function(grunt) {
       options: {
         spawn: false
       },
+      css: {
+       files: ['src/color-picker-ui.css'],
+       tasks: ['htmlConvert', 'build', 'jshint']
+      },
+      html: {
+        files: ['src/templates/*'],
+        tasks: ['htmlConvert', 'build', 'jshint']
+      },
       scripts: {
         files: '<%= jshint.files %>',
         tasks: ['htmlConvert', 'build', 'jshint']
@@ -49,22 +57,24 @@ module.exports = function(grunt) {
           'src/color-picker-ui.js',
           'src/end.js'
         ],
-        dest: 'color-picker-ui.js'
+        dest: 'dist/color-picker-ui.js'
       }
     },
 
     uglify: {
       dist: {
         files: {
-          'color-picker-ui.min.js': ['color-picker-ui.js']
+          'dist/color-picker-ui.min.js': ['dist/color-picker-ui.js']
         }
       }
     },
 
     copy: {
       demo: {
-        src: 'color-picker-ui.js',
-        dest: 'demo/'
+        files: {
+          'demo/color-picker-ui.js': ['dist/color-picker-ui.js'],
+          'demo/color-picker-ui.css': ['src/color-picker-ui.css']
+        }
       }
     },
 

@@ -1,1 +1,19 @@
-<div>{{= hello }}</div>
+<div class="color-picker-ui-dropdown" style="width: {{=width}}px;">
+  <!-- Nav -->
+  <ul class="cp-top">
+    <li class="cp-top-btn cp-pallete-btn cp-top-btn-active">{{=texts[lang].pallete}}</li>
+    <li class="cp-top-btn cp-picker-btn">{{=texts[lang].picker}}</li>
+  </ul>
+
+  <!-- Content -->
+  <div class="cp-content">
+    <div class="cp-pallete"></div>
+    <div class="cp-color-picker"></div>
+  </div>
+
+  <!-- Footer -->
+  <div class="cp-footer">
+    <div class="cp-selected-color" style="background: {{=selectedColor}};"></div>
+    <input class="text" type="text" value="{{=selectedColor}}">
+  </div>
+</div>

@@ -39,7 +39,25 @@
 
 var templates = {};
 
-templates["templates/dropdown-template.html"] = "<div>{{= hello }}</div>";
+templates["templates/dropdown-template.html"] = "<div class=\"color-picker-ui-dropdown\" style=\"width: {{=width}}px;\">\n" +
+   "  <!-- Nav -->\n" +
+   "  <ul class=\"cp-top\">\n" +
+   "    <li class=\"cp-top-btn cp-pallete-btn cp-top-btn-active\">{{=texts[lang].pallete}}</li>\n" +
+   "    <li class=\"cp-top-btn cp-picker-btn\">{{=texts[lang].picker}}</li>\n" +
+   "  </ul>\n" +
+   "\n" +
+   "  <!-- Content -->\n" +
+   "  <div class=\"cp-content\">\n" +
+   "    <div class=\"cp-pallete\"></div>\n" +
+   "    <div class=\"cp-color-picker\"></div>\n" +
+   "  </div>\n" +
+   "\n" +
+   "  <!-- Footer -->\n" +
+   "  <div class=\"cp-footer\">\n" +
+   "    <div class=\"cp-selected-color\" style=\"background: {{=selectedColor}};\"></div>\n" +
+   "    <input class=\"text\" type=\"text\" value=\"{{=selectedColor}}\">\n" +
+   "  </div>\n" +
+   "</div>";
 
 /**
  * ColorPickerUi Constructor
@@ -48,7 +66,7 @@ templates["templates/dropdown-template.html"] = "<div>{{= hello }}</div>";
  *        pallete: {Array} Override default pallete color
  */
 function ColorPickerUi(options) {
-  this.options = $.extend(true, options, this.defaults);
+  this.options = $.extend(true, this.defaults, options);
   // todo => check given target have already a colorpicker
   this._render();
 }
@@ -63,33 +81,43 @@ ColorPickerUi.prototype.template = templates['templates/dropdown-template.html']
  * Render the dropdown.
  */
 ColorPickerUi.prototype._render = function() {
-  var html = tmpl(this.template, {hello: 'vamossss'});
+  var html = tmpl(this.template, this.options);
   this.$el = $('body').append(html);
-  this._positionate(this.options.target);
-  this._setEvents();
-
+  this._positionate(this.options.target, this.options.verticalPosition);
+  this._setEvents('on');
 };
 
 /**
  * Remove the dropdown, undelegate events and destroy the view.
  */
 ColorPickerUi.prototype.remove = function() {
-  this.$el.off();
+  this._setEvents('off');
   this.$el.remove();
 };
 
 /**
- * Once rendered the dropdown, set events.
+ * Set events to on/off
  */
-ColorPickerUi.prototype._setEvents = function() {
+ColorPickerUi.prototype._setEvents = function(action) {
+  var self = this;
+
+  this.$el.find('.cp-pallete-btn')[action]('click', function(e) {
+    console.log('click pallete');
+  });
+
+  this.$el.find('.cp-picker-btn')[action]('click', function(e) {
+    console.log('click color picker');
+  });
+
 };
 
 /**
  * Place the dropdow near the given target.
  * 
  * @param {HTML element} target
+ * @param {String}       verticalPosition   
  */
-ColorPickerUi.prototype._positionate = function(target) {
+ColorPickerUi.prototype._positionate = function(target, verticalPosition) {
   var $target = $(target);
   var position = $target.offset();
   var width = $target.outerWidth();
@@ -107,7 +135,19 @@ ColorPickerUi.prototype.defaults = {
     '#11002F','#3B007F','#6B0FB2','#081B47','#0F3B82','#2167AB',
     '#FF2900','#FF5C00','#FFA300','#000000'
   ],
-  template: '<div>',
+  selectedColor: '#000',
+  width: 200,
+  lang: 'en',
+  texts: {
+    en: {
+      pallete: 'pallete',
+      picker: 'picker'
+    },
+    es: {
+      pallete: 'paleta',
+      picker: 'selector'
+    }
+  },
   verticalPosition: 'top'
 };
 
@@ -123,6 +163,23 @@ ColorPickerUi.setPallete = function(pallete) {
     return;
   }
   ColorPickerUi.prototype.defaults.pallete = pallete;
+};
+
+/**
+ * Adds a new language to defaults texts.
+ * If any given text is missing, it will take the english one
+ * by default.
+ * 
+ * @param {String} locale
+ * @param {Object} texts  Texts of the locale
+ */
+ColorPickerUi.addLang = function(locale, texts) {
+  if (typeof locale !== 'string') {
+    console.warn('ColorPickerUi needs a locale string to add a new language.');
+    return;
+  }
+  texts = $.extend(ColorPickerUi.prototype.defaults.texts.en, texts);
+  ColorPickerUi.prototype.defaults.texts[locale] = texts;
 };
 /* jshint ignore:start */
   ColorPickerUi.version = '0.0.0';
