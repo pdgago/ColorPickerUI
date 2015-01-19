@@ -28,7 +28,7 @@ ColorPickerUi.prototype._render = function() {
 };
 
 /**
- * Remove the dropdown, undelegate events and destroy the view.
+ * Remove the from the dom, undelegate events and destroy the view.
  */
 ColorPickerUi.prototype.remove = function() {
   this._setEvents('off');
@@ -76,7 +76,7 @@ ColorPickerUi.prototype._positionate = function(trigger, verticalPosition) {
     yBeforeAnimation = y - 5;
   }
 
-  this.$el.css({'top': yBeforeAnimation, opacity: 0.5})
+  this.$el.css({'top': yBeforeAnimation, opacity: 0.7})
     .animate({top: y, opacity: 1}, 80, 'linear');
 
   this.$el.css('left', x);
@@ -120,7 +120,11 @@ ColorPickerUi.prototype._selectColor = function(hexColor) {
   this.$el.find('.cp-selected-color').css('background', hexColor);
   this.$el.find('.cp-footer input').val(hexColor);
   this.options.onPick.apply(this, [hexColor]);
-  this.remove();
+  // Only remove when selecting a color,
+  // if it's been displayed as a dropdown.
+  if (this.options.trigger) {
+    this.remove();
+  }
 };
 
 ColorPickerUi.prototype.defaults = {
