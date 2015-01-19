@@ -35,7 +35,7 @@ module.exports = function(grunt) {
         spawn: false
       },
       css: {
-       files: ['src/color-picker-ui.css'],
+       files: ['src/dropdown-color-picker-ui.css'],
        tasks: ['htmlConvert', 'build', 'jshint']
       },
       html: {
@@ -54,17 +54,17 @@ module.exports = function(grunt) {
           'src/start.js',
           'bower_components/micro-templating/micro-mustache.js',
           '.tmp/templates.js',
-          'src/color-picker-ui.js',
+          'src/dropdown-color-picker-ui.js',
           'src/end.js'
         ],
-        dest: 'dist/color-picker-ui.js'
+        dest: 'dist/dropdown-color-picker-ui.js'
       }
     },
 
     uglify: {
       dist: {
         files: {
-          'dist/color-picker-ui.min.js': ['dist/color-picker-ui.js']
+          'dist/dropdown-color-picker-ui.min.js': ['dist/dropdown-color-picker-ui.js']
         }
       }
     },
@@ -72,8 +72,8 @@ module.exports = function(grunt) {
     copy: {
       demo: {
         files: {
-          'demo/color-picker-ui.js': ['dist/color-picker-ui.js'],
-          'demo/color-picker-ui.css': ['src/color-picker-ui.css']
+          'demo/dropdown-color-picker-ui.js': ['dist/dropdown-color-picker-ui.js'],
+          'demo/dropdown-color-picker-ui.css': ['src/dropdown-color-picker-ui.css']
         }
       }
     },

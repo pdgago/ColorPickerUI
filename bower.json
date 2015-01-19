@@ -1,12 +1,12 @@
 {
-  "name": "ColorPickerUI",
+  "name": "DropdownColorPickerUI",
   "version": "0.0.0",
-  "homepage": "https://github.com/pdgago/ColorPickerUI",
+  "homepage": "https://github.com/pdgago/DropdownColorPickerUI",
   "authors": [
     "Pedro <pdgago@gmail.com>"
   ],
   "description": "Color picker dropdown",
-  "main": "color-picker-ui.js",
+  "main": "dropdown-color-picker-ui.js",
   "keywords": [
     "color",
     "picker"
