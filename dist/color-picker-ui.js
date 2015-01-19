@@ -39,23 +39,27 @@
 
 var templates = {};
 
-templates["templates/dropdown-template.html"] = "<div class=\"color-picker-ui-dropdown\" style=\"width: {{=width}}px;\">\n" +
+templates["templates/dropdown-template.html"] = "<div class=\"color-picker-ui-dropdown\" style=\"width: {{= width }}px;\">\n" +
    "  <!-- Nav -->\n" +
    "  <ul class=\"cp-top\">\n" +
-   "    <li class=\"cp-top-btn cp-pallete-btn cp-top-btn-active\">{{=texts[lang].pallete}}</li>\n" +
-   "    <li class=\"cp-top-btn cp-picker-btn\">{{=texts[lang].picker}}</li>\n" +
+   "    <li class=\"cp-top-btn cp-top-btn-active\" data-name=\"pallete\">{{= texts[lang].pallete }}</li>\n" +
+   "    <li class=\"cp-top-btn\" data-name=\"picker\">{{= texts[lang].picker }}</li>\n" +
    "  </ul>\n" +
    "\n" +
    "  <!-- Content -->\n" +
    "  <div class=\"cp-content\">\n" +
-   "    <div class=\"cp-pallete\"></div>\n" +
-   "    <div class=\"cp-color-picker\"></div>\n" +
+   "    <div class=\"cp-pallete\">\n" +
+   "      {{ for (var i = 0; i < pallete.length; i++) { }}\n" +
+   "        <span class=\"cp-pallete-color\" data-hex=\"{{= pallete[i] }}\" style=\"background-color: {{= pallete[i] }};\"></span>\n" +
+   "      {{ } }}\n" +
+   "    </div>\n" +
+   "    <div class=\"cp-picker\" style=\"display: none;\">Picker</div>\n" +
    "  </div>\n" +
    "\n" +
    "  <!-- Footer -->\n" +
    "  <div class=\"cp-footer\">\n" +
-   "    <div class=\"cp-selected-color\" style=\"background: {{=selectedColor}};\"></div>\n" +
-   "    <input class=\"text\" type=\"text\" value=\"{{=selectedColor}}\">\n" +
+   "    <div class=\"cp-selected-color\" style=\"background: {{= selectedColor }};\"></div>\n" +
+   "    <input class=\"text\" type=\"text\" value=\"{{= selectedColor }}\">\n" +
    "  </div>\n" +
    "</div>";
 
@@ -66,8 +70,7 @@ templates["templates/dropdown-template.html"] = "<div class=\"color-picker-ui-dr
  *        pallete: {Array} Override default pallete color
  */
 function ColorPickerUi(options) {
-  this.options = $.extend(true, this.defaults, options);
-  // todo => check given target have already a colorpicker
+  this.options = $.extend(true, {}, this.defaults, options);
   this._render();
 }
 
@@ -79,11 +82,13 @@ ColorPickerUi.prototype.template = templates['templates/dropdown-template.html']
 
 /**
  * Render the dropdown.
+ * This will render both tabs, pallete and the picker.
+ * Then both will be toggled for display.
  */
 ColorPickerUi.prototype._render = function() {
-  var html = tmpl(this.template, this.options);
-  this.$el = $('body').append(html);
-  this._positionate(this.options.target, this.options.verticalPosition);
+  this.$el = $(tmpl(this.template, this.options));
+  this.$el.appendTo(this.options.container);
+  this._positionate(this.options.trigger, this.options.verticalPosition);
   this._setEvents('on');
 };
 
@@ -101,27 +106,86 @@ ColorPickerUi.prototype.remove = function() {
 ColorPickerUi.prototype._setEvents = function(action) {
   var self = this;
 
-  this.$el.find('.cp-pallete-btn')[action]('click', function(e) {
-    console.log('click pallete');
+  this.$el.find('.cp-top-btn')[action]('click', function(event) {
+    self._onClickTab.apply(self, [event]);
   });
 
-  this.$el.find('.cp-picker-btn')[action]('click', function(e) {
-    console.log('click color picker');
+  this.$el.find('.cp-pallete-color')[action]('click', function(event) {
+    self._onClickPalleteColor.apply(self, [event]);
   });
-
 };
 
 /**
- * Place the dropdow near the given target.
+ * Place the dropdown near the given trigger.
+ * This function will be call if the trigger has been supplied.
  * 
- * @param {HTML element} target
+ * @param {HTML element} trigger
  * @param {String}       verticalPosition   
  */
-ColorPickerUi.prototype._positionate = function(target, verticalPosition) {
-  var $target = $(target);
-  var position = $target.offset();
-  var width = $target.outerWidth();
-  var height = $target.outerHeight();
+ColorPickerUi.prototype._positionate = function(trigger, verticalPosition) {
+  if (!trigger) {return;}
+  var $trigger = $(trigger);
+  var position = $trigger.offset();
+  var btnWidth = $trigger.outerWidth();
+  var btnHeight = $trigger.outerHeight();
+  var x = position.left - this.options.width/2 + btnWidth/2;
+  var y, yBeforeAnimation;
+
+  if (this.options.verticalPosition === 'top') {
+    // Top
+    y = position.top - this.$el.height();
+    yBeforeAnimation = y + 5;
+  } else {
+    // Bottom
+    y = position.top + btnHeight;
+    yBeforeAnimation = y - 5;
+  }
+
+  this.$el.css({'top': yBeforeAnimation, opacity: 0.5})
+    .animate({top: y, opacity: 1}, 80, 'linear');
+
+  this.$el.css('left', x);
+};
+
+/**
+ * Triggered when the user clicks on a tab.
+ * Change tab active classnames and toggle the content.
+ * 
+ * @param  {Objet} event
+ */
+ColorPickerUi.prototype._onClickTab = function(event) {
+  var $currentTarget = $(event.currentTarget);
+  var className = 'cp-top-btn-active';
+  var tabName = $currentTarget.data('name');
+  // Set active className
+  $currentTarget.addClass(className);
+  $currentTarget.siblings().removeClass(className);
+  // Toggle tab
+  this.$el.find('.cp-' + tabName).show().siblings().hide();
+};
+
+/**
+ * Triggered when the user clicks on a pallete color.
+ * 
+ * @param  {Object} event
+ */
+ColorPickerUi.prototype._onClickPalleteColor = function(event) {
+  var $currentTarget = $(event.currentTarget);
+  var hexColor = $currentTarget.data('hex');
+  this._selectColor(hexColor);
+};
+
+/**
+ * Set the supplied color as the current selected color.
+ * 
+ * @param  {String} hexColor
+ */
+ColorPickerUi.prototype._selectColor = function(hexColor) {
+  this.options.selectedColor = hexColor;
+  this.$el.find('.cp-selected-color').css('background', hexColor);
+  this.$el.find('.cp-footer input').val(hexColor);
+  this.options.onPick.apply(this, [hexColor]);
+  this.remove();
 };
 
 ColorPickerUi.prototype.defaults = {
@@ -135,6 +199,7 @@ ColorPickerUi.prototype.defaults = {
     '#11002F','#3B007F','#6B0FB2','#081B47','#0F3B82','#2167AB',
     '#FF2900','#FF5C00','#FFA300','#000000'
   ],
+  container: 'body',
   selectedColor: '#000',
   width: 200,
   lang: 'en',
@@ -148,6 +213,7 @@ ColorPickerUi.prototype.defaults = {
       picker: 'selector'
     }
   },
+  onPick: function(hexColor) {},
   verticalPosition: 'top'
 };
 

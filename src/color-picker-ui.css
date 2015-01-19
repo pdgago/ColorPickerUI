@@ -10,6 +10,10 @@ body {
   /*height: 100px;*/
 }
 
+.color-picker-ui-dropdown * {
+  box-sizing: border-box;
+}
+
 .cp-top {
   padding: 0;
   margin: 0;
@@ -38,5 +42,46 @@ body {
 }
 
 .cp-content {
-  padding: 12px 0;
+  padding: 12px;
+  width: 100%;
+  display: table;
+}
+
+.cp-footer {
+  height: 36px;
+  padding: 0 12px 12px;
+}
+
+.cp-footer input {
+  width: 80%;
+  border: none;
+  border-bottom: 1px solid #ddd;
+  margin-left: 5%;
+  display: inline-block;
+  color: #777;
+  height: 100%;
+}
+
+.cp-footer input:focus{
+  outline: 0;
+}
+
+.cp-selected-color {
+  width: 15%;
+  height: 100%;
+  float: left;
+  display: inline-block;
+  border-radius: 2px;
+}
+
+.cp-pallete-color {
+  display: inline-block;
+  height: 20px;
+  width: 6.666%;
+  float: left;
+  cursor: pointer;
+}
+
+.cp-pallete-color:hover {
+  border: 1px solid white;
 }
