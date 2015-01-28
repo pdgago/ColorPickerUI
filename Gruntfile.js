@@ -54,6 +54,7 @@ module.exports = function(grunt) {
           'src/start.js',
           'bower_components/micro-templating/micro-mustache.js',
           '.tmp/templates.js',
+          'src/helpers.js',
           'src/dropdown-color-picker-ui.js',
           'src/end.js'
         ],
