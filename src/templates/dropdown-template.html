@@ -1,15 +1,14 @@
 <div class="color-picker-ui-dropdown" style="width: {{= width }}px;">
   <!-- Nav -->
   <ul class="cp-top">
-    <li class="cp-top-btn cp-top-btn-active" data-name="pallete">{{= texts[lang].pallete }}</li>
-    <li class="cp-top-btn" data-name="picker">{{= texts[lang].picker }}</li>
+    <li class="cp-top-btn">{{= texts[lang].advanced }}</li>
   </ul>
 
   <!-- Content -->
   <div class="cp-content">
     <div class="cp-pallete">
       {{ for (var i = 0; i < pallete.length; i++) { }}
-        <span class="cp-pallete-color" data-hex="{{= pallete[i] }}" style="background-color: {{= pallete[i] }};"></span>
+        <span class="cp-pallete-color cp-hex" data-hex="{{= pallete[i] }}" style="background-color: {{= pallete[i] }};"></span>
       {{ } }}
     </div>
     <div class="cp-picker" style="display: none;">Picker</div>
@@ -18,6 +17,9 @@
   <!-- Footer -->
   <div class="cp-footer">
     <div class="cp-selected-color" style="background: {{= selectedColor }};"></div>
-    <input class="text" type="text" value="{{= selectedColor }}">
+    <input class="hex-input" type="text" value="{{= selectedColor }}">
+    {{ if (resetColor) { }}
+      <div class="cp-reset cp-hex" data-hex="{{= resetColor }}">{{= texts[lang].reset }}</div>
+    {{ } }}
   </div>
 </div>

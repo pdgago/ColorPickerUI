@@ -3,16 +3,20 @@
 <style>
   body {
     text-align: center;
+    margin-top: 100px;
   }
   body,
   input {
     font-family: 'Arial';
   }
-  button {
-    margin-top: 100px;
+  #selectedColor {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
   }
 </style>
 <body>
+<div id="selectedColor"></div><br/>
 <button id="pickerBtn">Pick a color</button>
 <script src="//code.jquery.com/jquery-1.11.2.js"></script>
 <link rel="stylesheet" type="text/css" href="dropdown-color-picker-ui.css">
@@ -20,19 +24,21 @@
 <script>
 
 $(function() {
-  var color = '#F11810';
+  var resetColor = '#F11810'
+  var selectedColor = resetColor;
+  $('#selectedColor').css('background', selectedColor);
 
   $('#pickerBtn').on('click', function(e) {
     var colorPicker = new ColorPickerUi({
-      // if its going to be opened with a button
       trigger: e.currentTarget,
       verticalPosition: 'bottom',
-      //
-      selectedColor: color,
-      lang: 'en',
+      selectedColor: selectedColor,
+      resetColor: resetColor,
+      width: 225,
+      lang: 'es',
       onPick: function(hexColor) {
-        color = hexColor;
-        console.log(hexColor);
+        selectedColor = hexColor;
+        $('#selectedColor').css('background', hexColor);
       }
     });
   });
