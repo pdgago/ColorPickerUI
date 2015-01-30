@@ -9,108 +9,100 @@
   overflow: hidden;
   border: 1px solid #ccc;
   box-shadow: 0 2px 10px rgba(0,0,0,.2);
+  padding: 12px;
+  color: #222;
+  font-size: 13px;
+  text-align: left;
 }
-
 .color-picker-ui-dropdown * {
   box-sizing: border-box;
 }
 
 /**
- * Top menu.
+ * Preview
  */
-.cp-top {
-  padding: 0;
-  margin: 0;
+.cp-preview {
   width: 100%;
-  height: 30px;
+  height: 26px;
+  margin-bottom: 12px;
 }
-
-.cp-top-btn {
-  float: left;
+.cp-selected-color,
+.cp-hex-input {
   display: inline-block;
-  width: 100%;
+  float: left;
   height: 100%;
-
-  background: #eee;
-  color: #15c;
-  cursor: pointer;
-  font-size: 12px;
-  line-height: 30px;
-  text-align: center;
-  border-bottom: 1px solid #d6d6d6;
 }
-
-.cp-top-btn:hover {
-  text-decoration: underline;
+.cp-selected-color {
+  width: 15%;
+  margin-right: 5%;
+}
+.cp-hex-input {
+  width: 80%;
+  padding-left: 2px;
+  border: none;
+  border-bottom: 1px solid #ddd;
+  border-radius: none;
+}
+.cp-hex-input:focus {
+  outline: 0;
+  border-color: #aaa;
 }
 
 /**
  * Content.
  */
 .cp-content {
-  padding: 12px;
   width: 100%;
   display: table;
 }
-
 .cp-pallete-color {
   display: inline-block;
   height: 20px;
-  width: 6.666%;
+  width: 6.667%;
   float: left;
   cursor: pointer;
 }
-
 .cp-pallete-color:hover {
   border: 1px solid white;
+}
+.cp-pallete-color.selected {
+  border: 1px solid white; 
+}
+
+/**
+ * Menu.
+ */
+.cp-menu {
+  margin-top: 12px;
+}
+.cp-menu-item {
+  padding: 7px 20px;
+  cursor: pointer;
+}
+.cp-menu-item:hover {
+  background-color: #eeeeee;
 }
 
 /**
  * Footer.
  */
-.cp-footer {
-  height: 36px;
-  padding: 0 12px 12px;
-  position: relative;
-}
-
-.cp-selected-color {
-  width: 32px;
-  height: 100%;
-  float: left;
-  display: inline-block;
-  border-radius: 1px;
-}
-
-.cp-footer input {
-  height: 25px;
-  position: absolute;
-  left: 52px;
-  width: 80px;
-  display: inline-block;
-
-  color: #555;
-  border: none;
-  border-bottom: 1px solid #ddd;
-  border-radius: 0;
-}
-
-.cp-footer input:focus {
-  outline: 0;
-  border-color: #aaa;
-}
-
-.cp-reset {
-  display: inline-block;
-  float: right;
-  height: 25px;
-  line-height: 24px;
-  width: 70px;
-  border: 1px solid #d6d6d6;
+.cp-btn {
+  height: 27px;
+  padding: 0 12px;
+  line-height: 27px;
+  cursor: default;
   border-radius: 1px;
   font-size: 12px;
-  cursor: pointer;
 }
-.cp-reset:hover {
-  background: #eee;
-};
+.cp-btn-primary {
+  color: white;
+  background: #427fed;
+  font-weight: bold;
+}
+.cp-btn-primary:hover{
+  background: #568ced;
+}
+.cp-apply-btn {
+  margin-top: 5px;
+  float: right;
+}

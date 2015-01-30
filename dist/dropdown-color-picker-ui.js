@@ -41,9 +41,10 @@ var templates = {};
 
 templates["templates/dropdown-template.html"] = "<div class=\"color-picker-ui-dropdown\" style=\"width: {{= width }}px;\">\n" +
    "  <!-- Nav -->\n" +
-   "  <ul class=\"cp-top\">\n" +
-   "    <li class=\"cp-top-btn\">{{= texts[lang].advanced }}</li>\n" +
-   "  </ul>\n" +
+   "  <div class=\"cp-preview\">\n" +
+   "    <div class=\"cp-selected-color\" style=\"background: {{= selectedColor}};\"></div>\n" +
+   "    <input class=\"cp-hex-input\" type=\"text\" value=\"{{= selectedColor }}\">\n" +
+   "  </div>\n" +
    "\n" +
    "  <!-- Content -->\n" +
    "  <div class=\"cp-content\">\n" +
@@ -55,14 +56,24 @@ templates["templates/dropdown-template.html"] = "<div class=\"color-picker-ui-dr
    "    <div class=\"cp-picker\" style=\"display: none;\">Picker</div>\n" +
    "  </div>\n" +
    "\n" +
-   "  <!-- Footer -->\n" +
-   "  <div class=\"cp-footer\">\n" +
-   "    <div class=\"cp-selected-color\" style=\"background: {{= selectedColor }};\"></div>\n" +
-   "    <input class=\"hex-input\" type=\"text\" value=\"{{= selectedColor }}\">\n" +
+   "  <!-- Menu -->\n" +
+   "  <div class=\"cp-menu\">\n" +
+   "    <div class=\"cp-menu-item\">\n" +
+   "      {{= texts[lang].moreColors }}...\n" +
+   "      <div class=\"arrow-icon\"></div>\n" +
+   "    </div>\n" +
+   "    <div class=\"cp-menu-item\">\n" +
+   "      {{= texts[lang].lineStyle }}\n" +
+   "      <div class=\"arrow-icon\"></div>\n" +
+   "    </div>\n" +
    "    {{ if (resetColor) { }}\n" +
-   "      <div class=\"cp-reset cp-hex\" data-hex=\"{{= resetColor }}\">{{= texts[lang].reset }}</div>\n" +
+   "      <div class=\"cp-menu-item\">{{= texts[lang].reset }}</div>\n" +
    "    {{ } }}\n" +
    "  </div>\n" +
+   "\n" +
+   "  <!-- Apply btn -->\n" +
+   "  <div class=\"cp-apply-btn cp-btn cp-btn-primary\">{{= texts[lang].apply }}</div>\n" +
+   "\n" +
    "</div>";
 
 /**
@@ -146,31 +157,32 @@ ColorPickerUi.prototype._setEvents = function(action) {
   });
 
   // Click pallete color
-  this.$el.find('.cp-pallete-color')[action]('click', function(event) {
+  this.$el.find('.cp-apply-btn')[action]('click', function(event) {
     that._onClickPalleteColor.apply(that, [event]);
   });
 
   // Mouse over color
-  this.$el.find('.cp-hex')[action]('mouseover', function() {
+  this.$el.find('.cp-hex')[action]('click', function() {
     var hex = $(this).data('hex');
+    $(this).addClass('selected').siblings().removeClass('selected');
     $hexInput.blur();
     that._previewColor(hex);
   });
-
+/*
   $(document)[action]('mouseover', function(event) {
     if ($hexInput.is(':focus')) {return;}
     var $target = $(event.target);
     if (!$target.hasClass('cp-hex')) {
       that._previewColor(that.options.selectedColor);
     }
-  });
+  });*/
 
   // Click reset color
-  if (this.options.resetColor) {
+/*  if (this.options.resetColor) {
     this.$el.find('.cp-reset')[action]('click', function() {
       that._selectColor(that.options.resetColor);
     });
-  }
+  }*/
 };
 
 /**
@@ -284,11 +296,15 @@ ColorPickerUi.prototype.defaults = {
   resetColor: null,
   texts: {
     en: {
-      advanced: 'More colors',
+      moreColors: 'More colors',
+      lineStyle: 'Line style',
+      apply: 'Apply',
       reset: 'Reset'
     },
     es: {
-      advanced: 'Más colores',
+      moreColors: 'Más colores',
+      lineStyle: 'Estilo de linea',
+      apply: 'Aplicar',
       reset: 'Restaurar'
     }
   },

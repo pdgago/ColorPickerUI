@@ -70,31 +70,32 @@ ColorPickerUi.prototype._setEvents = function(action) {
   });
 
   // Click pallete color
-  this.$el.find('.cp-pallete-color')[action]('click', function(event) {
+  this.$el.find('.cp-apply-btn')[action]('click', function(event) {
     that._onClickPalleteColor.apply(that, [event]);
   });
 
   // Mouse over color
-  this.$el.find('.cp-hex')[action]('mouseover', function() {
+  this.$el.find('.cp-hex')[action]('click', function() {
     var hex = $(this).data('hex');
+    $(this).addClass('selected').siblings().removeClass('selected');
     $hexInput.blur();
     that._previewColor(hex);
   });
-
+/*
   $(document)[action]('mouseover', function(event) {
     if ($hexInput.is(':focus')) {return;}
     var $target = $(event.target);
     if (!$target.hasClass('cp-hex')) {
       that._previewColor(that.options.selectedColor);
     }
-  });
+  });*/
 
   // Click reset color
-  if (this.options.resetColor) {
+/*  if (this.options.resetColor) {
     this.$el.find('.cp-reset')[action]('click', function() {
       that._selectColor(that.options.resetColor);
     });
-  }
+  }*/
 };
 
 /**
@@ -208,11 +209,15 @@ ColorPickerUi.prototype.defaults = {
   resetColor: null,
   texts: {
     en: {
-      advanced: 'More colors',
+      moreColors: 'More colors',
+      lineStyle: 'Line style',
+      apply: 'Apply',
       reset: 'Reset'
     },
     es: {
-      advanced: 'Más colores',
+      moreColors: 'Más colores',
+      lineStyle: 'Estilo de linea',
+      apply: 'Aplicar',
       reset: 'Restaurar'
     }
   },
