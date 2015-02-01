@@ -42,8 +42,8 @@ var templates = {};
 templates["templates/dropdown-template.html"] = "<div class=\"color-picker-ui-dropdown\" style=\"width: {{= width }}px;\">\n" +
    "  <!-- Nav -->\n" +
    "  <div class=\"cp-preview\">\n" +
-   "    <div class=\"cp-selected-color\" style=\"background: {{= selectedColor}};\"></div>\n" +
-   "    <input class=\"cp-hex-input\" type=\"text\" value=\"{{= selectedColor }}\">\n" +
+   "    <div class=\"cp-selected-color\" style=\"background: {{= selected.color }};\"></div>\n" +
+   "    <input class=\"cp-hex-input\" type=\"text\" value=\"{{= selected.color  }}\">\n" +
    "  </div>\n" +
    "\n" +
    "  <!-- Content -->\n" +
@@ -62,19 +62,39 @@ templates["templates/dropdown-template.html"] = "<div class=\"color-picker-ui-dr
    "      {{= texts[lang].moreColors }}...\n" +
    "      <div class=\"arrow-icon\"></div>\n" +
    "    </div>\n" +
-   "    <div class=\"cp-menu-item\">\n" +
+   "    <div class=\"cp-menu-item cp-line-style-btn\">\n" +
    "      {{= texts[lang].lineStyle }}\n" +
    "      <div class=\"arrow-icon\"></div>\n" +
    "    </div>\n" +
    "    {{ if (resetColor) { }}\n" +
-   "      <div class=\"cp-menu-item\">{{= texts[lang].reset }}</div>\n" +
+   "      <div class=\"cp-menu-item cp-reset-btn\">{{= texts[lang].reset }}</div>\n" +
    "    {{ } }}\n" +
    "  </div>\n" +
-   "\n" +
-   "  <!-- Apply btn -->\n" +
-   "  <div class=\"cp-apply-btn cp-btn cp-btn-primary\">{{= texts[lang].apply }}</div>\n" +
-   "\n" +
    "</div>";
+
+templates["templates/line-style-template.html"] = "<div class=\"cp-container cp-line-style-container\">\n" +
+   "  <label>{{= texts[lang].stroke }}</label>\n" +
+   "  <select class=\"cp-stroke\">\n" +
+   "    <option value=\"normal\">normal</option>\n" +
+   "  </select>\n" +
+   "\n" +
+   "  <label>{{= texts[lang].thickness }}</label>\n" +
+   "  <select class=\"cp-thickness\">\n" +
+   "    <option value=\"1\">1px</option>\n" +
+   "    <option value=\"2\">2px</option>\n" +
+   "    <option value=\"3\">3px</option>\n" +
+   "  </select>\n" +
+   "\n" +
+   "  <div class=\"cp-btn-group\">\n" +
+   "    <div class=\"cp-btn cp-btn-primary cp-btn-apply\">{{= texts[lang].apply }}</div>\n" +
+   "    <div class=\"cp-btn cp-btn-cancel\">{{= texts[lang].cancel }}</div>\n" +
+   "  </div>\n" +
+   "</div>\n" +
+   "";
+
+templates["templates/more-colors-template.html"] = "<div class=\"cp-more-colors-container\">\n" +
+   "</div>\n" +
+   "";
 
 /**
  * Returns true if the given hex is a valid hex color.
@@ -103,6 +123,12 @@ function ColorPickerUi(options) {
 ColorPickerUi.prototype.template = templates['templates/dropdown-template.html'];
 
 /**
+ * Line style template.
+ * @type {[type]}
+ */
+ColorPickerUi.prototype.lineStyleTemplate = templates['templates/line-style-template.html'];
+
+/**
  * Render the dropdown.
  * This will render both tabs, pallete and the picker.
  * Then both will be toggled for display.
@@ -114,11 +140,20 @@ ColorPickerUi.prototype._render = function() {
   this._setEvents('on');
 };
 
+ColorPickerUi.prototype._renderStyleLine = function() {
+  var $html = $(tmpl(this.lineStyleTemplate, this.options));
+  this.$el.html($html);
+  this._setEvents('off');
+  $html.fadeIn(120);
+  this._setLineStyleEvents('on');
+};
+
 /**
  * Remove the from the dom, undelegate events and destroy the view.
  */
 ColorPickerUi.prototype.remove = function() {
   this._setEvents('off');
+  this._setLineStyleEvents('off');
   var moveTo = this.options.verticalPosition === 'top' ? '-5' : '5';
 
   this.$el.animate({'margin-top': moveTo, opacity: '0'}, 200,
@@ -132,7 +167,7 @@ ColorPickerUi.prototype.remove = function() {
  */
 ColorPickerUi.prototype._setEvents = function(action) {
   var that = this;
-  var $hexInput = this.$el.find('.hex-input');
+  var $hexInput = this.$el.find('.cp-hex-input');
 
   $hexInput[action]('keyup', function(event) {
     var hex = $(this).val();
@@ -143,7 +178,7 @@ ColorPickerUi.prototype._setEvents = function(action) {
     if (isHex(hex)) {
       that._previewColor(hex, true);
     } else {
-      that._previewColor(that.options.selectedColor, true);
+      that._previewColor(that.options.selected.color, true);
     }
   });
 
@@ -151,38 +186,58 @@ ColorPickerUi.prototype._setEvents = function(action) {
     var hex;
     if (event.which === 13) {
       hex = $(this).val();
-      hex = isHex(hex) ? hex : that.options.selectedColor;
-      that._selectColor(hex);
+      hex = isHex(hex) ? hex : that.options.selected.color;
+      that._applyChanges({color: hex});
     }
   });
 
-  // Click pallete color
-  this.$el.find('.cp-apply-btn')[action]('click', function(event) {
+  // Click hex
+  this.$el.find('.cp-hex')[action]('click', function(event) {
     that._onClickPalleteColor.apply(that, [event]);
   });
 
   // Mouse over color
-  this.$el.find('.cp-hex')[action]('click', function() {
+  this.$el.find('.cp-hex')[action]('mouseover', function() {
     var hex = $(this).data('hex');
-    $(this).addClass('selected').siblings().removeClass('selected');
     $hexInput.blur();
     that._previewColor(hex);
   });
-/*
+
   $(document)[action]('mouseover', function(event) {
     if ($hexInput.is(':focus')) {return;}
     var $target = $(event.target);
     if (!$target.hasClass('cp-hex')) {
-      that._previewColor(that.options.selectedColor);
+      that._previewColor(that.options.selected.color);
     }
-  });*/
+  });
 
   // Click reset color
-/*  if (this.options.resetColor) {
-    this.$el.find('.cp-reset')[action]('click', function() {
-      that._selectColor(that.options.resetColor);
+  if (this.options.resetColor) {
+    this.$el.find('.cp-reset-btn')[action]('click', function() {
+      that._applyChanges({color: that.options.resetColor});
     });
-  }*/
+  }
+
+  this.$el.find('.cp-line-style-btn')[action]('click', function() {
+    that._renderStyleLine();
+  });
+};
+
+ColorPickerUi.prototype._setLineStyleEvents = function(action) {
+  var that = this;
+
+  this.$el.find('.cp-btn-cancel')[action]('click', function() {
+    that.remove();
+  });
+
+  this.$el.find('.cp-btn-apply')[action]('click', function() {
+    var stroke = that.$el.find('.cp-stroke').val();
+    var thickness = that.$el.find('.cp-thickness').val();
+    that._applyChanges({
+      storke: stroke,
+      thickness: thickness
+    });
+  });
 };
 
 /**
@@ -218,31 +273,14 @@ ColorPickerUi.prototype._positionate = function(trigger, verticalPosition) {
 };
 
 /**
- * Triggered when the user clicks on a tab.
- * Change tab active classnames and toggle the content.
- * 
- * @param  {Objet} event
- */
-/*ColorPickerUi.prototype._onClickTab = function(event) {
-  var $currentTarget = $(event.currentTarget);
-  var className = 'cp-top-btn-active';
-  var tabName = $currentTarget.data('name');
-  // Set active className
-  $currentTarget.addClass(className);
-  $currentTarget.siblings().removeClass(className);
-  // Toggle tab
-  this.$el.find('.cp-' + tabName).show().siblings().hide();
-};
-*/
-/**
  * Triggered when the user clicks on a pallete color.
  * 
  * @param  {Object} event
  */
 ColorPickerUi.prototype._onClickPalleteColor = function(event) {
   var $currentTarget = $(event.currentTarget);
-  var hexColor = $currentTarget.data('hex');
-  this._selectColor(hexColor);
+  var hex = $currentTarget.data('hex');
+  this._applyChanges({color: hex});
 };
 
 /**
@@ -250,10 +288,21 @@ ColorPickerUi.prototype._onClickPalleteColor = function(event) {
  * 
  * @param  {String} hexColor
  */
-ColorPickerUi.prototype._selectColor = function(hexColor) {
-  this.options.selectedColor = hexColor;
-  this._previewColor(hexColor);
-  this.options.onPick.apply(this, [hexColor]);
+ColorPickerUi.prototype._applyChanges = function(params) {
+  if (params.color) {
+    this.options.selected.color = params.color;
+  }
+
+  if (params.stroke) {
+    this.options.selected.stroke = params.stroke;
+  }
+
+  if (params.thickness) {
+    this.options.selected.thickness = params.thickness;
+  }
+
+  this.options.onPick.apply(this, [this.options.selected]);
+
   // Only remove when selecting a color,
   // if it's been displayed as a dropdown.
   if (this.options.trigger) {
@@ -266,11 +315,10 @@ ColorPickerUi.prototype._selectColor = function(hexColor) {
  * 
  * @param  {String} hexColor
  */
-ColorPickerUi.prototype._previewColor = function(hexColor, dontChangeInput) {
-  this.$el.find('.cp-selected-color').css('background', hexColor);
-
+ColorPickerUi.prototype._previewColor = function(hex, dontChangeInput) {
+  this.$el.find('.cp-selected-color').css('background', hex);
   if (!dontChangeInput) {
-    this.$el.find('.cp-footer input').val(hexColor);
+    this.$el.find('.cp-hex-input').val(hex);
   }
 };
 
@@ -290,7 +338,11 @@ ColorPickerUi.prototype.defaults = {
     '#ef5350','#e57373','#ef9a9a', // Light red
   ],
   container: 'body',
-  selectedColor: '#000',
+  selected: {
+    color: '#000',
+    stroke: 'normal',
+    thickness: '1'
+  },
   width: 200,
   lang: 'en',
   resetColor: null,
@@ -298,14 +350,20 @@ ColorPickerUi.prototype.defaults = {
     en: {
       moreColors: 'More colors',
       lineStyle: 'Line style',
-      apply: 'Apply',
-      reset: 'Reset'
+      reset: 'Reset',
+      stroke: 'Stroke',
+      thickness: 'Thickness',
+      cancel: 'Cancel',
+      apply: 'Apply'
     },
     es: {
       moreColors: 'Más colores',
       lineStyle: 'Estilo de linea',
-      apply: 'Aplicar',
-      reset: 'Restaurar'
+      reset: 'Restaurar',
+      stroke: 'Trazo',
+      thickness: 'Grosor',
+      cancel: 'Cancelar',
+      apply: 'Aplicar'
     }
   },
   onPick: function(hexColor) {},

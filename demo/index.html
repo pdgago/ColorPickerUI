@@ -32,12 +32,15 @@ $(function() {
     var colorPicker = new ColorPickerUi({
       trigger: e.currentTarget,
       verticalPosition: 'bottom',
-      selectedColor: selectedColor,
+      selected: {
+        color: selectedColor
+      },
       resetColor: resetColor,
       lang: 'es',
-      onPick: function(hexColor) {
-        selectedColor = hexColor;
-        $('#selectedColor').css('background', hexColor);
+      onPick: function(params) {
+        console.log(params);
+        selectedColor = params.color;
+        $('#selectedColor').css('background', params.color);
       }
     });
   });

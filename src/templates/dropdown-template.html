@@ -1,8 +1,8 @@
 <div class="color-picker-ui-dropdown" style="width: {{= width }}px;">
   <!-- Nav -->
   <div class="cp-preview">
-    <div class="cp-selected-color" style="background: {{= selectedColor}};"></div>
-    <input class="cp-hex-input" type="text" value="{{= selectedColor }}">
+    <div class="cp-selected-color" style="background: {{= selected.color }};"></div>
+    <input class="cp-hex-input" type="text" value="{{= selected.color  }}">
   </div>
 
   <!-- Content -->
@@ -21,16 +21,12 @@
       {{= texts[lang].moreColors }}...
       <div class="arrow-icon"></div>
     </div>
-    <div class="cp-menu-item">
+    <div class="cp-menu-item cp-line-style-btn">
       {{= texts[lang].lineStyle }}
       <div class="arrow-icon"></div>
     </div>
     {{ if (resetColor) { }}
-      <div class="cp-menu-item">{{= texts[lang].reset }}</div>
+      <div class="cp-menu-item cp-reset-btn">{{= texts[lang].reset }}</div>
     {{ } }}
   </div>
-
-  <!-- Apply btn -->
-  <div class="cp-apply-btn cp-btn cp-btn-primary">{{= texts[lang].apply }}</div>
-
 </div>
