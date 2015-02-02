@@ -2,7 +2,7 @@
   <label>{{= texts[lang].stroke }}</label>
   <select class="cp-stroke">
     {{ $.each(lineStroke, function(i, stroke) { }}
-      <option value="{{= stroke.toLowerCase() }}" {{= stroke === selected.stroke ? 'selected' : '' }}>{{= texts[lang][stroke] }}</option>
+      <option value="{{= stroke.toLowerCase() }}" {{= stroke.toLowerCase() === selected.stroke ? 'selected' : '' }}>{{= texts[lang][stroke] }}</option>
     {{ }); }}
   </select>
 

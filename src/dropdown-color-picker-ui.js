@@ -247,7 +247,7 @@ ColorPickerUi.prototype._applyChanges = function(params) {
   if (params.thickness) {
     this.options.selected.thickness = params.thickness;
   }
-  console.log(this.options.selected);
+
   this.options.onPick.apply(this, [this.options.selected]);
 
   // Only remove when selecting a color,

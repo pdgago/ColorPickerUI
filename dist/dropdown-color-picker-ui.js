@@ -519,7 +519,7 @@ templates["templates/line-style-template.html"] = "<div class=\"cp-container cp-
    "  <label>{{= texts[lang].stroke }}</label>\n" +
    "  <select class=\"cp-stroke\">\n" +
    "    {{ $.each(lineStroke, function(i, stroke) { }}\n" +
-   "      <option value=\"{{= stroke.toLowerCase() }}\" {{= stroke === selected.stroke ? 'selected' : '' }}>{{= texts[lang][stroke] }}</option>\n" +
+   "      <option value=\"{{= stroke.toLowerCase() }}\" {{= stroke.toLowerCase() === selected.stroke ? 'selected' : '' }}>{{= texts[lang][stroke] }}</option>\n" +
    "    {{ }); }}\n" +
    "  </select>\n" +
    "\n" +
@@ -804,7 +804,7 @@ ColorPickerUi.prototype._applyChanges = function(params) {
   if (params.thickness) {
     this.options.selected.thickness = params.thickness;
   }
-  console.log(this.options.selected);
+
   this.options.onPick.apply(this, [this.options.selected]);
 
   // Only remove when selecting a color,
