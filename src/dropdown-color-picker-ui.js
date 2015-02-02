@@ -163,7 +163,7 @@ ColorPickerUi.prototype._setLineStyleEvents = function(action) {
     var stroke = that.$el.find('.cp-stroke').val();
     var thickness = that.$el.find('.cp-thickness').val();
     that._applyChanges({
-      storke: stroke,
+      stroke: stroke,
       thickness: thickness
     });
   });
@@ -235,6 +235,7 @@ ColorPickerUi.prototype._onClickPalleteColor = function(event) {
  */
 ColorPickerUi.prototype._applyChanges = function(params) {
   params = params || {};
+
   if (params.color) {
     this.options.selected.color = params.color;
   }
@@ -246,7 +247,7 @@ ColorPickerUi.prototype._applyChanges = function(params) {
   if (params.thickness) {
     this.options.selected.thickness = params.thickness;
   }
-
+  console.log(this.options.selected);
   this.options.onPick.apply(this, [this.options.selected]);
 
   // Only remove when selecting a color,
@@ -286,7 +287,7 @@ ColorPickerUi.prototype.defaults = {
   container: 'body',
   selected: {
     color: '#000',
-    stroke: 'normal',
+    stroke: 'solid',
     thickness: 1
   },
   lineStroke: ['solid', 'dash', 'shortDash', 'longDash'],
