@@ -80,9 +80,11 @@ templates["templates/line-style-template.html"] = "<div class=\"cp-container cp-
    "\n" +
    "  <label>{{= texts[lang].thickness }}</label>\n" +
    "  <select class=\"cp-thickness\">\n" +
+   "    <option value=\"0\">0px</option>\n" +
    "    <option value=\"1\">1px</option>\n" +
    "    <option value=\"2\">2px</option>\n" +
    "    <option value=\"3\">3px</option>\n" +
+   "    <option value=\"4\">4px</option>\n" +
    "  </select>\n" +
    "\n" +
    "  <div class=\"cp-btn-group\">\n" +
