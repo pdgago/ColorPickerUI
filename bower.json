@@ -20,6 +20,7 @@
     "tests"
   ],
   "devDependencies": {
-    "micro-templating": "https://gist.github.com/1ba771583eea5a59ac82.git"
+    "micro-templating": "https://gist.github.com/1ba771583eea5a59ac82.git",
+    "FlexiColorPicker": "https://github.com/pdgago/FlexiColorPicker.git#1.0.0"
   }
 }

@@ -57,7 +57,7 @@
 /**
  * Content.
  */
-.cp-content {
+.cp-pallete {
   width: 100%;
   display: table;
   padding: 0 12px 12px;
@@ -97,9 +97,9 @@
  * Footer.
  */
 .cp-btn {
-  height: 27px;
+  height: 29px;
   padding: 0 12px;
-  line-height: 27px;
+  line-height: 29px;
   cursor: default;
   border-radius: 1px;
   font-size: 12px;
@@ -123,7 +123,7 @@
   color: white;
 }
 .cp-btn-group {
-  margin-top: 5px;
+  display: block;
   width: 100%;
 }
 .cp-btn-group .cp-btn {
@@ -145,4 +145,68 @@
   margin: 4px 0 12px 0;
   padding: 4px 0;
   border-color: #ddd;
+}
+
+/**
+ * More colors.
+ */
+.cp-more-colors-container {
+  padding-top: 0;
+  display: none;
+  width: 100%;
+}
+
+.cp-color-picker-container {
+  margin-bottom: 12px;
+}
+
+.cp-color-picker-container,
+.picker,
+.picker-wrapper,
+.slide {
+  height: 150px;
+  width: 100%;
+}
+
+/* Color picker style */
+.picker-wrapper {
+  width: 87%;
+  margin-right: 3%;
+}
+.slide-wrapper {
+  width: 10%;
+}
+.picker-wrapper, 
+.slide-wrapper {
+  position: relative;
+  float: left;
+}
+.picker-indicator,
+.slide-indicator {
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+}
+.picker,
+.slide {
+  cursor: crosshair;
+  float: left;
+}
+.picker-indicator {
+  width: 9px;
+  height: 9px;
+  border: 1px solid rgba(250,250,250,0.9);
+  -moz-border-radius: 4px;
+  -o-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  box-shadow: 0 0 0 1px rgba(20,20,20,1);
+  background-color: transparent;
+}
+.slide-indicator {
+  width: 100%;
+  height: 3px;
+  background-color: transparent;
+  box-shadow: 0 0 0 1px rgba(20,20,20,1);
 }

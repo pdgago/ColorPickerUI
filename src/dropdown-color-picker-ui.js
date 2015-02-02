@@ -17,9 +17,16 @@ ColorPickerUi.prototype.template = templates['templates/dropdown-template.html']
 
 /**
  * Line style template.
- * @type {[type]}
+ * @type {String}
  */
 ColorPickerUi.prototype.lineStyleTemplate = templates['templates/line-style-template.html'];
+
+/**
+ * More colors template.
+ * @type {String}
+ */
+ColorPickerUi.prototype.moreColorsTemplate = templates['templates/more-colors-template.html'];
+
 
 /**
  * Render the dropdown.
@@ -35,10 +42,35 @@ ColorPickerUi.prototype._render = function() {
 
 ColorPickerUi.prototype._renderStyleLine = function() {
   var $html = $(tmpl(this.lineStyleTemplate, this.options));
+  var $selectThickness = $html.find('.cp-thickness');
+  var that = this;
+
   this.$el.html($html);
   this._setEvents('off');
   $html.fadeIn(120);
   this._setLineStyleEvents('on');
+};
+
+ColorPickerUi.prototype._renderMoreColors = function() {
+  var that = this;
+  var $html = $(tmpl(this.moreColorsTemplate, this.options));
+  var $hexInput = this.$el.find('.cp-hex-input');
+
+  this.$el.find('.cp-pallete').remove();
+  this.$el.find('.cp-menu').remove();
+  this.$el.append($html);
+
+  var cp = ColorPicker(this.$el.find('.cp-color-picker-container').get(0),
+    function(hex, hsv, rgb) {
+      $hexInput.blur();
+      that._previewColor(hex);
+      that.options.selected.color = hex;
+    });
+
+  cp.setHex(this.options.selected.color);
+
+  $html.fadeIn(120);
+  this._setMoreColorsEvents('on');
 };
 
 /**
@@ -114,6 +146,10 @@ ColorPickerUi.prototype._setEvents = function(action) {
   this.$el.find('.cp-line-style-btn')[action]('click', function() {
     that._renderStyleLine();
   });
+
+  this.$el.find('.cp-more-colors-btn')[action]('click', function() {
+    that._renderMoreColors();
+  });
 };
 
 ColorPickerUi.prototype._setLineStyleEvents = function(action) {
@@ -130,6 +166,18 @@ ColorPickerUi.prototype._setLineStyleEvents = function(action) {
       storke: stroke,
       thickness: thickness
     });
+  });
+};
+
+ColorPickerUi.prototype._setMoreColorsEvents = function(action) {
+  var that = this;
+
+  this.$el.find('.cp-btn-cancel')[action]('click', function() {
+    that.remove();
+  });
+
+  this.$el.find('.cp-btn-apply')[action]('click', function() {
+    that._applyChanges();
   });
 };
 
@@ -182,6 +230,7 @@ ColorPickerUi.prototype._onClickPalleteColor = function(event) {
  * @param  {String} hexColor
  */
 ColorPickerUi.prototype._applyChanges = function(params) {
+  params = params || {};
   if (params.color) {
     this.options.selected.color = params.color;
   }
@@ -234,8 +283,10 @@ ColorPickerUi.prototype.defaults = {
   selected: {
     color: '#000',
     stroke: 'normal',
-    thickness: '1'
+    thickness: 1
   },
+  lineStroke: ['solid', 'dash', 'shortDash', 'longDash'],
+  lineThickness: [0,1,2,3,4],
   width: 200,
   lang: 'en',
   resetColor: null,
@@ -247,7 +298,11 @@ ColorPickerUi.prototype.defaults = {
       stroke: 'Stroke',
       thickness: 'Thickness',
       cancel: 'Cancel',
-      apply: 'Apply'
+      apply: 'Apply',
+      solid: 'Solid',
+      dash: 'Dash',
+      shortDash: 'Short dash',
+      longDash: 'Long dash'
     },
     es: {
       moreColors: 'Más colores',
@@ -256,7 +311,11 @@ ColorPickerUi.prototype.defaults = {
       stroke: 'Trazo',
       thickness: 'Grosor',
       cancel: 'Cancelar',
-      apply: 'Aplicar'
+      apply: 'Aplicar',
+      solid: 'Solido',
+      dash: 'Discontinuo',
+      shortDash: 'Discontinuo corto',
+      longDash: 'Discontinuo largo'
     }
   },
   onPick: function(hexColor) {},

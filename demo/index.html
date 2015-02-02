@@ -36,9 +36,8 @@ $(function() {
         color: selectedColor
       },
       resetColor: resetColor,
-      lang: 'es',
+      lang: 'en',
       onPick: function(params) {
-        console.log(params);
         selectedColor = params.color;
         $('#selectedColor').css('background', params.color);
       }

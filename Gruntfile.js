@@ -20,7 +20,7 @@ module.exports = function(grunt) {
       ]
     },
 
-    clean: ['.tmp'],
+    clean: ['.tmp', 'dist'],
 
     bower: {
       install: {
@@ -53,6 +53,7 @@ module.exports = function(grunt) {
         src: [
           'src/start.js',
           'bower_components/micro-templating/micro-mustache.js',
+          'bower_components/FlexiColorPicker/colorpicker.js',
           '.tmp/templates.js',
           'src/helpers.js',
           'src/dropdown-color-picker-ui.js',
@@ -62,10 +63,24 @@ module.exports = function(grunt) {
       }
     },
 
+    concat_css: {
+      options: {},
+      dist: {
+        files: {
+          'dist/dropdown-color-picker-ui.css': [
+            'src/dropdown-color-picker-ui.css',
+            'bower_components/FlexiColorPicker/themes.css'
+          ]
+        }
+      }
+    },
+
     uglify: {
       dist: {
         files: {
-          'dist/dropdown-color-picker-ui.min.js': ['dist/dropdown-color-picker-ui.js']
+          'dist/dropdown-color-picker-ui.min.js': [
+            'dist/dropdown-color-picker-ui.js'
+          ]
         }
       }
     },
@@ -74,7 +89,7 @@ module.exports = function(grunt) {
       demo: {
         files: {
           'demo/dropdown-color-picker-ui.js': ['dist/dropdown-color-picker-ui.js'],
-          'demo/dropdown-color-picker-ui.css': ['src/dropdown-color-picker-ui.css']
+          'demo/dropdown-color-picker-ui.css': ['dist/dropdown-color-picker-ui.css']
         }
       }
     },
@@ -102,8 +117,9 @@ module.exports = function(grunt) {
 
   grunt.registerTask('build', [
     'clean',
-    'htmlConvert',
-    'concat',
+    'htmlConvert',  
+    'concat:dist',
+    'concat_css:dist',
     'uglify',
     'copy:demo'
   ]);

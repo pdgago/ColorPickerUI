@@ -1,16 +1,16 @@
 <div class="cp-container cp-line-style-container">
   <label>{{= texts[lang].stroke }}</label>
   <select class="cp-stroke">
-    <option value="normal">normal</option>
+    {{ $.each(lineStroke, function(i, stroke) { }}
+      <option value="{{= stroke.toLowerCase() }}" {{= stroke === selected.stroke ? 'selected' : '' }}>{{= texts[lang][stroke] }}</option>
+    {{ }); }}
   </select>
 
   <label>{{= texts[lang].thickness }}</label>
   <select class="cp-thickness">
-    <option value="0">0px</option>
-    <option value="1">1px</option>
-    <option value="2">2px</option>
-    <option value="3">3px</option>
-    <option value="4">4px</option>
+    {{ $.each(lineThickness, function(i, thickness) { }}
+      <option value="{{= thickness }}" {{= thickness === selected.thickness ? 'selected' : '' }}>{{= thickness }}px</option>
+    {{ }); }}
   </select>
 
   <div class="cp-btn-group">
