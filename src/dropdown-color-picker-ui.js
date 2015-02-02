@@ -197,6 +197,10 @@ ColorPickerUi.prototype._positionate = function(trigger, verticalPosition) {
   var x = position.left - this.options.width/2 + btnWidth/2;
   var y, yBeforeAnimation;
 
+  if (x < 0) {
+    x = 0;
+  }
+
   if (this.options.verticalPosition === 'top') {
     // Top
     y = position.top - this.$el.height();

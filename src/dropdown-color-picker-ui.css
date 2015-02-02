@@ -42,14 +42,14 @@
   width: 15%;
   margin-right: 5%;
 }
-.cp-hex-input {
+.cp-preview input[type="text"] {
   width: 80%;
   padding-left: 2px;
   border: none;
   border-bottom: 1px solid #ddd;
   border-radius: none;
 }
-.cp-hex-input:focus {
+.cp-preview input[type="text"]:focus {
   outline: 0;
   border-color: #aaa;
 }
@@ -145,6 +145,7 @@
   margin: 4px 0 12px 0;
   padding: 4px 0;
   border-color: #ddd;
+  border-width: 1px;
 }
 
 /**
