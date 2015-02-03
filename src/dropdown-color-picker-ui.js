@@ -6,6 +6,7 @@
  */
 function ColorPickerUi(options) {
   this.options = $.extend(true, {}, this.defaults, options);
+  this.options.lineThickness = options.lineThickness || this.defaults.lineThickness;
   this._render();
 }
 
@@ -87,6 +88,12 @@ ColorPickerUi.prototype.remove = function() {
     });
 };
 
+ColorPickerUi.prototype._getCurrentInputHex = function() {
+  var hex = this.$el.find('.cp-hex-input').val();
+  hex = isHex(hex) ? hex : this.options.selected.color;
+  return hex;
+};
+
 /**
  * Set events to on/off
  */
@@ -110,8 +117,7 @@ ColorPickerUi.prototype._setEvents = function(action) {
   $hexInput[action]('keypress', function(event) {
     var hex;
     if (event.which === 13) {
-      hex = $(this).val();
-      hex = isHex(hex) ? hex : that.options.selected.color;
+      hex = that._getCurrentInputHex();
       that._applyChanges({color: hex});
     }
   });
@@ -177,7 +183,8 @@ ColorPickerUi.prototype._setMoreColorsEvents = function(action) {
   });
 
   this.$el.find('.cp-btn-apply')[action]('click', function() {
-    that._applyChanges();
+    var hex = that._getCurrentInputHex();
+    that._applyChanges({color: hex});
   });
 };
 
