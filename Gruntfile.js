@@ -35,7 +35,7 @@ module.exports = function(grunt) {
         spawn: false
       },
       css: {
-       files: ['src/dropdown-color-picker-ui.css'],
+       files: ['src/dropdown-line-style.css'],
        tasks: ['htmlConvert', 'build', 'jshint']
       },
       html: {
@@ -56,10 +56,10 @@ module.exports = function(grunt) {
           'bower_components/FlexiColorPicker/colorpicker.js',
           '.tmp/templates.js',
           'src/helpers.js',
-          'src/dropdown-color-picker-ui.js',
+          'src/dropdown-line-style.js',
           'src/end.js'
         ],
-        dest: 'dist/dropdown-color-picker-ui.js'
+        dest: 'dist/dropdown-line-style.js'
       }
     },
 
@@ -67,8 +67,8 @@ module.exports = function(grunt) {
       options: {},
       dist: {
         files: {
-          'dist/dropdown-color-picker-ui.css': [
-            'src/dropdown-color-picker-ui.css',
+          'dist/dropdown-line-style.css': [
+            'src/dropdown-line-style.css',
             'bower_components/FlexiColorPicker/themes.css'
           ]
         }
@@ -78,8 +78,8 @@ module.exports = function(grunt) {
     uglify: {
       dist: {
         files: {
-          'dist/dropdown-color-picker-ui.min.js': [
-            'dist/dropdown-color-picker-ui.js'
+          'dist/dropdown-line-style.min.js': [
+            'dist/dropdown-line-style.js'
           ]
         }
       }
@@ -88,8 +88,8 @@ module.exports = function(grunt) {
     copy: {
       demo: {
         files: {
-          'demo/dropdown-color-picker-ui.js': ['dist/dropdown-color-picker-ui.js'],
-          'demo/dropdown-color-picker-ui.css': ['dist/dropdown-color-picker-ui.css']
+          'demo/dropdown-line-style.js': ['dist/dropdown-line-style.js'],
+          'demo/dropdown-line-style.css': ['dist/dropdown-line-style.css']
         }
       }
     },
