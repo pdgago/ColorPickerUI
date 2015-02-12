@@ -1,6 +1,6 @@
 {
   "name": "dropdown-line-style",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Color picker dropdown",
   "main": "dropdown-line-style.min.js",
   "scripts": {
