@@ -22,7 +22,7 @@
       {{= texts[lang].lineStyle }}
       <div class="arrow-icon"></div>
     </div>
-    {{ if (resetColor) { }}
+    {{ if (reset.color || reset.stroke || reset.thickness) { }}
       <div class="cp-menu-item cp-reset-btn">{{= texts[lang].reset }}</div>
     {{ } }}
   </div>

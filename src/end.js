@@ -1,12 +1,12 @@
 /* jshint ignore:start */
-  ColorPickerUi.version = '0.0.0';
+  DropdownLineStyle.version = '0.0.0';
   if (typeof define === 'function' && define.amd) {
     define([], function() {
-      return ColorPickerUi;
+      return DropdownLineStyle;
     });
   } else if (typeof module === 'object' && module.exports) {
-    module.exports = ColorPickerUi;
+    module.exports = DropdownLineStyle;
   }
-  this.ColorPickerUi = ColorPickerUi;
+  this.DropdownLineStyle = DropdownLineStyle;
 }.call(window);
 /* jshint ignore:end */

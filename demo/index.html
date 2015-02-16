@@ -24,21 +24,29 @@
 <script>
 
 $(function() {
-  var resetColor = '#F11810'
-  var selectedColor = resetColor;
+  var reset = {
+    color: '#F11810',
+    stroke: 'dash',
+    thickness: 2
+  };
+  var selected = {
+    color: '#F11810',
+    stroke: 'dash',
+    thickness: 2
+  };
   $('#selectedColor').css('background', selectedColor);
 
   $('#pickerBtn').on('click', function(e) {
-    var colorPicker = new ColorPickerUi({
+    var colorPicker = new DropdownLineStyle({
       trigger: e.currentTarget,
       verticalPosition: 'bottom',
-      selected: {
-        color: selectedColor
-      },
-      resetColor: resetColor,
+      selected: selected,
+      reset: reset,
       lang: 'en',
       onPick: function(params) {
-        selectedColor = params.color;
+        selected = params;
+        console.log('reset', reset);
+        console.log('selected', selected);
         $('#selectedColor').css('background', params.color);
       }
     });

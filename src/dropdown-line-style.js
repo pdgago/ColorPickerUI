@@ -1,32 +1,32 @@
 /**
- * ColorPickerUi Constructor
+ * DropdownLineStyle Constructor
  *
  * @param {Object} options
  *        pallete: {Array} Override default pallete color
  */
-function ColorPickerUi(options) {
+function DropdownLineStyle(options) {
   this.options = $.extend(true, {}, this.defaults, options);
   this.options.lineThickness = options.lineThickness || this.defaults.lineThickness;
   this._render();
 }
 
 /**
- * Dropdown template (the main template of the ColorPickerUI).
+ * Dropdown template (the main template of the DropdownLineStyle).
  * @type {String}
  */
-ColorPickerUi.prototype.template = templates['templates/dropdown-template.html'];
+DropdownLineStyle.prototype.template = templates['templates/dropdown-template.html'];
 
 /**
  * Line style template.
  * @type {String}
  */
-ColorPickerUi.prototype.lineStyleTemplate = templates['templates/line-style-template.html'];
+DropdownLineStyle.prototype.lineStyleTemplate = templates['templates/line-style-template.html'];
 
 /**
  * More colors template.
  * @type {String}
  */
-ColorPickerUi.prototype.moreColorsTemplate = templates['templates/more-colors-template.html'];
+DropdownLineStyle.prototype.moreColorsTemplate = templates['templates/more-colors-template.html'];
 
 
 /**
@@ -34,14 +34,14 @@ ColorPickerUi.prototype.moreColorsTemplate = templates['templates/more-colors-te
  * This will render both tabs, pallete and the picker.
  * Then both will be toggled for display.
  */
-ColorPickerUi.prototype._render = function() {
+DropdownLineStyle.prototype._render = function() {
   this.$el = $(tmpl(this.template, this.options));
   this.$el.appendTo(this.options.container);
   this._positionate(this.options.trigger, this.options.verticalPosition);
   this._setEvents('on');
 };
 
-ColorPickerUi.prototype._renderStyleLine = function() {
+DropdownLineStyle.prototype._renderStyleLine = function() {
   var $html = $(tmpl(this.lineStyleTemplate, this.options));
   var $selectThickness = $html.find('.cp-thickness');
   var that = this;
@@ -52,7 +52,7 @@ ColorPickerUi.prototype._renderStyleLine = function() {
   this._setLineStyleEvents('on');
 };
 
-ColorPickerUi.prototype._renderMoreColors = function() {
+DropdownLineStyle.prototype._renderMoreColors = function() {
   var that = this;
   var $html = $(tmpl(this.moreColorsTemplate, this.options));
   var $hexInput = this.$el.find('.cp-hex-input');
@@ -77,7 +77,7 @@ ColorPickerUi.prototype._renderMoreColors = function() {
 /**
  * Remove the from the dom, undelegate events and destroy the view.
  */
-ColorPickerUi.prototype.remove = function() {
+DropdownLineStyle.prototype.remove = function() {
   this._setEvents('off');
   this._setLineStyleEvents('off');
   var moveTo = this.options.verticalPosition === 'top' ? '-5' : '5';
@@ -88,7 +88,7 @@ ColorPickerUi.prototype.remove = function() {
     });
 };
 
-ColorPickerUi.prototype._getCurrentInputHex = function() {
+DropdownLineStyle.prototype._getCurrentInputHex = function() {
   var hex = this.$el.find('.cp-hex-input').val();
   hex = isHex(hex) ? hex : this.options.selected.color;
   return hex;
@@ -97,7 +97,7 @@ ColorPickerUi.prototype._getCurrentInputHex = function() {
 /**
  * Set events to on/off
  */
-ColorPickerUi.prototype._setEvents = function(action) {
+DropdownLineStyle.prototype._setEvents = function(action) {
   var that = this;
   var $hexInput = this.$el.find('.cp-hex-input');
 
@@ -143,11 +143,9 @@ ColorPickerUi.prototype._setEvents = function(action) {
   });
 
   // Click reset color
-  if (this.options.resetColor) {
-    this.$el.find('.cp-reset-btn')[action]('click', function() {
-      that._applyChanges({color: that.options.resetColor});
-    });
-  }
+  this.$el.find('.cp-reset-btn')[action]('click', function() {
+    that._applyChanges(that.options.reset);
+  });
 
   this.$el.find('.cp-line-style-btn')[action]('click', function() {
     that._renderStyleLine();
@@ -158,7 +156,7 @@ ColorPickerUi.prototype._setEvents = function(action) {
   });
 };
 
-ColorPickerUi.prototype._setLineStyleEvents = function(action) {
+DropdownLineStyle.prototype._setLineStyleEvents = function(action) {
   var that = this;
 
   this.$el.find('.cp-btn-cancel')[action]('click', function() {
@@ -175,7 +173,7 @@ ColorPickerUi.prototype._setLineStyleEvents = function(action) {
   });
 };
 
-ColorPickerUi.prototype._setMoreColorsEvents = function(action) {
+DropdownLineStyle.prototype._setMoreColorsEvents = function(action) {
   var that = this;
 
   this.$el.find('.cp-btn-cancel')[action]('click', function() {
@@ -191,11 +189,11 @@ ColorPickerUi.prototype._setMoreColorsEvents = function(action) {
 /**
  * Place the dropdown near the given trigger.
  * This function will be call if the trigger has been supplied.
- * 
+ *
  * @param {HTML element} trigger
- * @param {String}       verticalPosition   
+ * @param {String}       verticalPosition
  */
-ColorPickerUi.prototype._positionate = function(trigger, verticalPosition) {
+DropdownLineStyle.prototype._positionate = function(trigger, verticalPosition) {
   if (!trigger) {return;}
   var $trigger = $(trigger);
   var position = $trigger.offset();
@@ -226,10 +224,10 @@ ColorPickerUi.prototype._positionate = function(trigger, verticalPosition) {
 
 /**
  * Triggered when the user clicks on a pallete color.
- * 
+ *
  * @param  {Object} event
  */
-ColorPickerUi.prototype._onClickPalleteColor = function(event) {
+DropdownLineStyle.prototype._onClickPalleteColor = function(event) {
   var $currentTarget = $(event.currentTarget);
   var hex = $currentTarget.data('hex');
   this._applyChanges({color: hex});
@@ -237,10 +235,10 @@ ColorPickerUi.prototype._onClickPalleteColor = function(event) {
 
 /**
  * Set the supplied color as the current selected color.
- * 
+ *
  * @param  {String} hexColor
  */
-ColorPickerUi.prototype._applyChanges = function(params) {
+DropdownLineStyle.prototype._applyChanges = function(params) {
   params = params || {};
 
   if (params.color) {
@@ -252,7 +250,7 @@ ColorPickerUi.prototype._applyChanges = function(params) {
   }
 
   if (params.thickness) {
-    this.options.selected.thickness = params.thickness;
+    this.options.selected.thickness = Number(params.thickness);
   }
 
   this.options.onPick.apply(this, [this.options.selected]);
@@ -266,17 +264,17 @@ ColorPickerUi.prototype._applyChanges = function(params) {
 
 /**
  * Change the preview color input.
- * 
+ *
  * @param  {String} hexColor
  */
-ColorPickerUi.prototype._previewColor = function(hex, dontChangeInput) {
+DropdownLineStyle.prototype._previewColor = function(hex, dontChangeInput) {
   this.$el.find('.cp-selected-color').css('background', hex);
   if (!dontChangeInput) {
     this.$el.find('.cp-hex-input').val(hex);
   }
 };
 
-ColorPickerUi.prototype.defaults = {
+DropdownLineStyle.prototype.defaults = {
   pallete: [
     // First file
     '#4527a0','#5e35b1','#7e57c2', // Purple
@@ -297,11 +295,15 @@ ColorPickerUi.prototype.defaults = {
     stroke: 'solid',
     thickness: 1
   },
+  reset: {
+    color: null,
+    stroke: null,
+    thickness: null
+  },
   lineStroke: ['solid', 'dash', 'shortDash', 'longDash'],
   lineThickness: [0,1,2,3,4],
   width: 200,
   lang: 'en',
-  resetColor: null,
   texts: {
     en: {
       moreColors: 'More colors',
@@ -340,27 +342,27 @@ ColorPickerUi.prototype.defaults = {
  *
  * @param {Array} pallete Array colors
  */
-ColorPickerUi.setPallete = function(pallete) {
+DropdownLineStyle.setPallete = function(pallete) {
   if (!(pallete instanceof Array) || !pallete.length) {
-    console.warn('ColorPickerUi can\'t set the given pallete. It should be an array.');
+    console.warn('DropdownLineStyle can\'t set the given pallete. It should be an array.');
     return;
   }
-  ColorPickerUi.prototype.defaults.pallete = pallete;
+  DropdownLineStyle.prototype.defaults.pallete = pallete;
 };
 
 /**
  * Adds a new language to defaults texts.
  * If any given text is missing, it will take the english one
  * by default.
- * 
+ *
  * @param {String} locale
  * @param {Object} texts  Texts of the locale
  */
-ColorPickerUi.addLang = function(locale, texts) {
+DropdownLineStyle.addLang = function(locale, texts) {
   if (typeof locale !== 'string') {
-    console.warn('ColorPickerUi needs a locale string to add a new language.');
+    console.warn('DropdownLineStyle needs a locale string to add a new language.');
     return;
   }
-  texts = $.extend(ColorPickerUi.prototype.defaults.texts.en, texts);
-  ColorPickerUi.prototype.defaults.texts[locale] = texts;
+  texts = $.extend(DropdownLineStyle.prototype.defaults.texts.en, texts);
+  DropdownLineStyle.prototype.defaults.texts[locale] = texts;
 };
