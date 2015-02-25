@@ -73,7 +73,7 @@
   border: 1px solid white;
 }
 .cp-pallete-color.selected {
-  border: 1px solid white; 
+  border: 1px solid white;
 }
 
 /**
@@ -99,10 +99,10 @@
 .cp-btn {
   height: 29px;
   padding: 0 12px;
-  line-height: 29px;
+  line-height: 28px;
   cursor: default;
   border-radius: 1px;
-  font-size: 12px;
+  font-size: 13px;
   display: inline-block;
   text-align: center;
   color: #555;
@@ -143,9 +143,6 @@
 .cp-line-style-container select {
   width: 100%;
   margin: 4px 0 12px 0;
-  padding: 4px 0;
-  border-color: #ddd;
-  border-width: 1px;
 }
 
 /**
@@ -177,7 +174,7 @@
 .slide-wrapper {
   width: 10%;
 }
-.picker-wrapper, 
+.picker-wrapper,
 .slide-wrapper {
   position: relative;
   float: left;
